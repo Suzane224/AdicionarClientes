@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Cliente</title>
+</head>
+<body>
+    <h1>Adicionar Novo Cliente</h1>
+
+    <!-- Formulário para adicionar cliente -->
+    <form id="add-form" onsubmit="adicionarCliente(event)">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" required><br><br>
+
+        <label for="telefone">Telefone:</label>
+        <input type="text" id="telefone" required><br><br>
+
+        <button type="submit">Adicionar Cliente</button>
+    </form>
+    <br></br>
+    <br></br>
+    <a href="cliente.html"> Mostrar Clientes</a>
+
+
+    <script>
+        // Função para adicionar um novo cliente
+        function adicionarCliente(event) {
+            event.preventDefault();  // Impede o envio tradicional do formulário
+
+            // Coleta os dados do formulário
+            const nome = document.getElementById('nome').value;
+            const telefone = document.getElementById('telefone').value;
+
+            // Prepara o objeto JSON com os dados do cliente
+            const clienteData = { nome, telefone };
+
+            // Envia os dados para a API usando fetch
+            fetch('http://127.0.0.1:5000/addcliente', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(clienteData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);  // Exibe uma mensagem de sucesso
+                document.getElementById('add-form').reset();  // Limpa o formulário
+            })
+            .catch(error => {
+                console.error('Erro ao adicionar cliente:', error);
+                alert('Erro ao adicionar cliente.');
+            });
+        }
+    </script>
+</body>
+</html>
